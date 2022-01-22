@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import { SideBar } from './components/SideBar';
 import { Content } from './components/Content';
@@ -41,7 +41,7 @@ export function App() {
     });
   }, []);
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     api.get<MovieProps[]>(`movies/?Genre_id=${selectedGenreId}`).then(response => {
       setMovies(response.data);
     });
@@ -54,6 +54,10 @@ export function App() {
   function handleClickButton(id: number) {
     setSelectedGenreId(id);
   }
+
+  useEffect(() => {
+    fetchData()
+  }, [selectedGenreId])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
